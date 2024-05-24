@@ -1,0 +1,16 @@
+- name: deploy cockroach yaml
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ cockroach_namespace }}"
+    src: cockroachdb-statefulset.yaml
+
+- name: wait 10 second
+  pause:
+    seconds: 10
+
+- name: init cockroach db
+  kubernetes.core.k8s_exec:
+    namespace: "{{ cockroach_namespace }}"
+    pod: cockroachdb-0
+    command: /cockroach/cockroach init --certs-dir=/cockroach/cockroach-certs
+  ignore_errors: yes

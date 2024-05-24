@@ -1,0 +1,18 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+---
+
+# setting force to false so can instead modify the namespace by downloading ahead of time
+- name: Download cockroach clientyaml
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/cockroachdb/cockroach/master/cloud/kubernetes/bring-your-own-certs/client.yaml
+    dest: cockroach/files/client.yaml
+    force: true
+    mode: '0664'
+
+- name: deploy cockroach client yaml
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ cockroach_namespace }}"
+    src: client.yaml

@@ -1,0 +1,37 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+---
+
+- name: Create a k8s postgres namespace
+  kubernetes.core.k8s:
+    name: "{{ cockroach_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+# setting force to false so can instead modify the namespace by downloading ahead of time
+- name: Download cockroach yaml
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/cockroachdb/cockroach/master/cloud/kubernetes/bring-your-own-certs/cockroachdb-statefulset.yaml
+    dest: cockroach/files/cockroachdb-statefulset-clean.yaml
+    force: true
+    mode: '0664'
+
+- name: Copy clean version to use location
+  copy:
+    src: cockroach/files/cockroachdb-statefulset-clean.yaml
+    dest: cockroach/files/cockroachdb-statefulset.yaml
+
+- name: replace the defualt namespace with desired namespace
+  ansible.builtin.lineinfile:
+    path: cockroach/files/cockroachdb-statefulset.yaml
+    insertafter: "kind: RoleBinding"
+    search_string: 'namespace: default'
+    line: "  namespace: {{ cockroach_namespace }}"
+
+- name: replace the policy as it is deprecated
+  ansible.builtin.lineinfile:
+    path: cockroach/files/cockroachdb-statefulset.yaml
+    search_string: 'apiVersion: policy/v1beta1'
+    line: 'apiVersion: policy/v1'

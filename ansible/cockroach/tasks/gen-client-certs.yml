@@ -1,0 +1,26 @@
+- name: make certs dir
+  file:
+    path: certs
+    state: directory
+    mode: '0755'
+
+- name: make my-safe-directory dir
+  file:
+    path: my-safe-directory
+    state: directory
+    mode: '0755'
+
+- name: generate ca key 
+  shell:
+    cmd: "cockroach cert create-ca --certs-dir=certs --ca-key=my-safe-directory/ca.key"
+    creates: my-safe-directory/ca.key
+
+- name: generate client certs for root
+  shell:
+    cmd: "cockroach cert create-client root --certs-dir=certs --ca-key=my-safe-directory/ca.key"
+    creates: certs/client.root.key
+
+- name: create client certificate secret
+  shell:
+    cmd: "kubectl -n {{ cockroach_namespace }} create secret generic cockroachdb.client.root --from-file=certs"
+  ignore_errors: true

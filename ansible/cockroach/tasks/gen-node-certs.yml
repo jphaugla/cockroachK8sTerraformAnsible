@@ -1,0 +1,9 @@
+- name: generate node keys 
+  shell:
+    cmd: "cockroach cert create-node localhost 127.0.0.1 cockroachdb-public cockroachdb-public.{{ cockroach_namespace }} cockroachdb-public.{{ cockroach_namespace }}.svc.cluster.local *.cockroachdb *.cockroachdb.{{ cockroach_namespace }} *.cockroachdb.{{ cockroach_namespace }}.svc.cluster.local --certs-dir=certs --ca-key=my-safe-directory/ca.key"
+    creates: certs/node.key
+
+- name: create node certificate secret
+  shell:
+    cmd: "kubectl -n {{ cockroach_namespace }} create secret generic cockroachdb.node --from-file=certs"
+  ignore_errors: true

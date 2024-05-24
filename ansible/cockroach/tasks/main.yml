@@ -1,0 +1,33 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+---
+
+- name: "Connect to gke cluster (update kubeconfig)"
+  shell: "gcloud container clusters get-credentials {{ cluster_name }} --zone {{ gcp_zone }} --project {{ gcp_project }}"
+
+- name: get crdb stateful set yaml
+  include_tasks: get-stateful-set.yml
+  when:
+    - get_stateful_set|bool
+
+- name: generate client certificates
+  include_tasks: gen-client-certs.yml
+  when:
+    - gen_client_certs|bool
+
+- name: generate node certificates
+  include_tasks: gen-node-certs.yml
+  when:
+    - gen_node_certs|bool
+
+- name: create crdb 
+  include_tasks: create-crdb.yml		
+  when:
+    - create_crdb|bool
+
+- name: create crdb client
+  include_tasks: create-crdb-client.yml		
+  when:
+    - create_crdb_client|bool
+

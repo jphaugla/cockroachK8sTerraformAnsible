@@ -4,6 +4,7 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+*/.terraform.lock.hcl
 
 # Crash log files
 crash.log
@@ -32,3 +33,13 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+ 
+# ignore sensitive directories
+*/my-safe-directoy/
+*/certs/
+*/penv-ansible/
+*/gke_gcloud_auth_plugin_cache/
+*/gkeconfig/
+
+# remove .DS_STORE
+.DS_Store
