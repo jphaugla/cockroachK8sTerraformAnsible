@@ -1,3 +1,13 @@
+- name: remove certs dir if exists
+  file:
+    path: certs
+    state: absent
+
+- name: remove  my-safe-directory if exists
+  file:
+    path: my-safe-directory
+    state: absent
+
 - name: make certs dir
   file:
     path: certs

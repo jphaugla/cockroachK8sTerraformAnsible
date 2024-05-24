@@ -4,9 +4,16 @@
     namespace: "{{ cockroach_namespace }}"
     src: cockroachdb-statefulset.yaml
 
-- name: wait 10 second
+- name: wait until cockroach pod is running
+  shell:
+    cmd: "kubectl -n {{ cockroach_namespace }} get pod/cockroachdb-0 |grep cockroachdb-0 | grep Running"
+  register: running_output
+  retries: 10
+  until: running_output.stdout | length > 0
+
+- name: wait 2  seconds
   pause:
-    seconds: 10
+    seconds: 2
 
 - name: init cockroach db
   kubernetes.core.k8s_exec:

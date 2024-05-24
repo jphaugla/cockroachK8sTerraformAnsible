@@ -40,6 +40,12 @@ terraform.rc
 */penv-ansible/
 */gke_gcloud_auth_plugin_cache/
 */gkeconfig/
+ansible/cockroach/tasks/.create-crdb.yml.swp
+ansible/gke_gcloud_auth_plugin_cache
+ansible/gkeconfig
+ansible/my-safe-directory/
+terraform/test/.terraform.lock.hcl
+terraform/test/0
 
 # remove .DS_STORE
 .DS_Store
