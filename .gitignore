@@ -44,6 +44,7 @@ ansible/cockroach/tasks/.create-crdb.yml.swp
 ansible/gke_gcloud_auth_plugin_cache
 ansible/gkeconfig
 ansible/my-safe-directory/
+ansible/ansible-venv/
 terraform/test/.terraform.lock.hcl
 terraform/test/0
 

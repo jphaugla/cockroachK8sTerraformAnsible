@@ -15,4 +15,5 @@
   kubernetes.core.k8s:
     state: present
     namespace: "{{ cockroach_namespace }}"
+    kubeconfig: "{{ KUBECONFIG }}"
     src: client.yaml

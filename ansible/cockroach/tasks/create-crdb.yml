@@ -2,6 +2,7 @@
   kubernetes.core.k8s:
     state: present
     namespace: "{{ cockroach_namespace }}"
+    kubeconfig: "{{ KUBECONFIG }}"
     src: cockroachdb-statefulset.yaml
 
 - name: wait until cockroach pod is running
@@ -20,4 +21,5 @@
     namespace: "{{ cockroach_namespace }}"
     pod: cockroachdb-0
     command: /cockroach/cockroach init --certs-dir=/cockroach/cockroach-certs
+    kubeconfig: "{{ KUBECONFIG }}"
   ignore_errors: yes

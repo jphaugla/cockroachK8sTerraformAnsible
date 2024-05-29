@@ -1,0 +1,1 @@
+ansible-playbook  -vvvv --extra-vars cluster_state=present playbook.yml -e 'cluster_name=${azurerm_kubernetes_cluster.aks_region_1.name}'  -e 'azure_resource_group=${var.azure_resource_group}' -e 'cockroach_namespace=cockroach' -e 'is_gke=false' -e 'is_aks=true' -e 'KUBECONFIG=${var.kubernetes}' -e 'K8S_AUTH_KUBECONFIG=${var.kubernetes}' -e 'KUBERNETES_SERVICE_HOST=localhost' 

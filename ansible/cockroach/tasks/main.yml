@@ -3,8 +3,15 @@
 
 ---
 
+- name: "Connect to az cluster (update kubeconfig)"
+  shell: "az aks get-credentials --resource-group {{ azure_resource_group}}  --name {{ cluster_name }} --admin"
+  when:
+    - is_aks|bool
+
 - name: "Connect to gke cluster (update kubeconfig)"
   shell: "gcloud container clusters get-credentials {{ cluster_name }} --zone {{ gcp_zone }} --project {{ gcp_project }}"
+  when:
+    - is_gke|bool
 
 - name: get crdb stateful set yaml
   include_tasks: get-stateful-set.yml

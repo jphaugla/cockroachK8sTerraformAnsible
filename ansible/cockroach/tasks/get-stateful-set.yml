@@ -3,11 +3,12 @@
 
 ---
 
-- name: Create a k8s postgres namespace
+- name: Create a k8s cockroach namespace
   kubernetes.core.k8s:
     name: "{{ cockroach_namespace }}"
     api_version: v1
     kind: Namespace
+    kubeconfig: "{{ KUBECONFIG }}"
     state: present
 
 # setting force to false so can instead modify the namespace by downloading ahead of time
