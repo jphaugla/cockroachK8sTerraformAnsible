@@ -35,7 +35,7 @@ override.tf.json
 terraform.rc
  
 # ignore sensitive directories
-*/my-safe-directoy/
+*/my-safe-directory/
 */certs/
 */penv-ansible/
 */gke_gcloud_auth_plugin_cache/
@@ -46,6 +46,7 @@ ansible/gkeconfig
 ansible/my-safe-directory/
 ansible/ansible-venv/
 terraform/test/.terraform.lock.hcl
+terraform-azure/test/.terraform.lock.hcl
 terraform/test/0
 
 # remove .DS_STORE
