@@ -1,0 +1,46 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+- name: set the contexts in setup.py
+  ansible.builtin.lineinfile:
+    path: cockroach/files/setup.py
+    insertafter: "contexts = {"
+    line: "{{ context_list }}"
+
+- name: set the regions in setup.py
+  ansible.builtin.lineinfile:
+    path: cockroach/files/setup.py
+    insertafter: "regions = {"
+    line: "{{ zones_list }}"
+
+# add a space after the colons in the context and regions
+- name: replace context list semicolons with apostrophies
+  replace:
+    path: cockroach/files/setup.py
+    regexp: ";:;"
+    replace: ";: ;"
+
+# add a space after the commas in the context and regions
+- name: replace context list semicolons with apostrophies
+  replace:
+    path: cockroach/files/setup.py
+    regexp: ";,;"
+    replace: ";, ;"
+
+# replace semicolons with apostrophies 
+- name: replace context list semicolons with apostrophies
+  replace:
+    path: cockroach/files/setup.py
+    after: "contexts = {"
+    before: "regions = {"
+    regexp: ";"
+    replace: "'"
+
+# replace semicolons with apostrophies 
+- name: replace regions list semicolons with apostrophies
+  replace:
+    path: cockroach/files/setup.py
+    after: "regions = {"
+    before: "certs_dir = './certs'"
+    regexp: ";"
+    replace: "'"

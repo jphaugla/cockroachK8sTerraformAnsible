@@ -70,3 +70,7 @@ variable "cockroach_namespace" {
 variable "kubeconfig" {
   description = "the full path to the .kube config file"
 }
+
+variable "run_k8s_cockroach" {
+  description = "run the kubernetes to set up kafka.  Set to yes for single region but for multiregion or if want to do a more custom install of cockroachDB, set to no"
+}

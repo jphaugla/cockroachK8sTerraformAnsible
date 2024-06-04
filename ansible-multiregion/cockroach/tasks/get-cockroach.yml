@@ -1,0 +1,21 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+---
+
+- name: generate ca key
+  shell:
+    cmd: "curl -OOOOOOOOO https://raw.githubusercontent.com/cockroachdb/cockroach/master/cloud/kubernetes/multiregion/{README.md,client-secure.yaml,cluster-init-secure.yaml,cockroachdb-statefulset-secure.yaml,dns-lb.yaml,example-app-secure.yaml,external-name-svc.yaml,setup.py,teardown.py}"
+    chdir: cockroach/files
+    creates: cockroach/files/setup.py
+
+- name: Copy clean version to use location
+  copy:
+    src: cockroach/files/setup.py
+    dest: cockroach/files/setup.py.clean
+
+#  this is BAD.  current setup.py doesn't work so using a fixed version
+- name: using working version instead of downloaded version
+  copy:
+    src: cockroach/files/setup.py.ok
+    dest: cockroach/files/setup.py

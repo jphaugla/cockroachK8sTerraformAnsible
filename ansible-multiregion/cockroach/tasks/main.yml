@@ -1,0 +1,35 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+---
+- name: add python prereqs
+  include_tasks: add-python.yml
+  when:
+    - add_python|bool
+
+- name: get necessary cockroach files
+  include_tasks: get-cockroach.yml
+  when:
+    - get_cockroach|bool
+
+- name: patch setup.py
+  include_tasks: patch-setup.yml
+  when:
+    - patch_setup|bool
+
+- name: edit setup.py
+  include_tasks: edit-setup.yml
+  when:
+    - edit_setup|bool
+
+- name: edit cockroachdb-statefulset-secure.yaml
+  include_tasks: edit-stateful.yml
+  when:
+    - edit_stateful|bool
+
+- name: run setup.py
+  shell: 
+    cmd: python setup.py
+    chdir: cockroach/files 
+  when:
+    - run_setup|bool

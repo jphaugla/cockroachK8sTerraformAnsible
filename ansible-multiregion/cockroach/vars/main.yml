@@ -1,0 +1,11 @@
+#  these boolean variables can be set true or true to control execution of terraform tasks
+#   in the ../tasks directory, the main.yml file uses these values to control execution
+#   these variable should be used for doing selective re-run of the ansible jobs.  Otherwise, no need to change
+# control flow parameters
+get_cockroach: true
+run_setup: true
+add_python: true
+edit_setup: true
+edit_stateful: true
+#  just using a replacement file
+patch_setup: false

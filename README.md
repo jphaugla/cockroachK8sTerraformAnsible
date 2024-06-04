@@ -37,6 +37,9 @@ terraform init
 terraform apply --auto-approve
 ```
 * The terraform and ansible will deploy using the steps referenced in [this cockroachDB documentation](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual)
+* To connect with the GCP need to run *gcloud container clusters get-credentials*
+  * The appropriate parameters for this are available in the GCP cloud interface by selecting the cluster and clicking on the *connect* link near the top of the UI
+  * Set the context to the *cockroach* namespace with *kubectl config set-context --current --namespace=cockroach*
 * To finish the steps referenced above, continue at [Step 5](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-4-access-the-db-console)
   
 #### Run AKS

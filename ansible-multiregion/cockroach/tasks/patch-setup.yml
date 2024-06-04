@@ -1,0 +1,40 @@
+# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
+# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
+
+# replace python 2 print statements with python 3
+- name: replace python 2 print statement
+  shell:
+    chdir: cockroach/files
+    cmd: '2to3 -f print -w setup.py'
+
+# replace dict with objdict
+- name: add objdict import
+  ansible.builtin.lineinfile:
+    path: cockroach/files/setup.py
+    insertafter: "import distutils.spawn"
+    line: "from objdict import ObjDict"
+
+- name: replace remote dns structure
+  replace:
+    path: cockroach/files/setup.py
+    regexp: "remote_dns_ips = dict"
+    replace: "remote_dns_ips = ObjDict"
+
+- name: replace json dump
+  lineinfile:
+    path: cockroach/files/setup.py
+    regexp: "json.dumps"
+    line: '""" % remote_dns_ips.dumps())'
+
+- name: replace ip assignment logic
+  lineinfile:
+    path: cockroach/files/setup.py
+    regexp: "remote_dns_ips[z"
+    line: "key = z+'.svc.cluster.local'"
+
+- name: add assignment
+  ansible.builtin.lineinfile:
+    path: cockroach/files/setup.py
+    insertafter: "key = z+'.svc.cluster.local'"
+    firstmatch: true
+    line: "remote_dns_ips.key = [ip]"

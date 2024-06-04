@@ -14,8 +14,8 @@ variable "region" {
     description = "Region to be used with the network and resources."
 }
 
-variable "cluster_name_final" {
-    description = "name of the GKE cluster"
+variable "cluster_prefix" {
+    description = "prefix for the name of the GKE cluster.  region will be added to this prefix for cluster name"
 }
 
 variable "zone" {

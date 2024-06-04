@@ -13,6 +13,9 @@
   when:
     - is_gke|bool
 
+- meta: end_play
+  when: run_k8s_cockroach == "no"
+
 - name: get crdb stateful set yaml
   include_tasks: get-stateful-set.yml
   when:

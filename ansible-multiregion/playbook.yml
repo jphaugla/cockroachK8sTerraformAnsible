@@ -1,0 +1,11 @@
+# Run me: ansible-playbook -vv --extra-vars cluster_state=[absent|present] playbook.yml
+# Reference: https://docs.ansible.com/ansible/latest/scenario_guides/guide_gce.html
+
+---
+
+- name: Create CockroachDB Cluster using Ansible GCP Library or GKE
+  hosts: localhost
+  gather_facts: no
+
+  roles:
+    - cockroach

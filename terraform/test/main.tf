@@ -12,4 +12,5 @@ module "mymodule" {
    zone 		= "us-central1-a"
    cockroach_namespace  = "cockroach"
    gke_release_channel  = "STABLE"
+   run_k8s_cockroach    = "yes"
 }
