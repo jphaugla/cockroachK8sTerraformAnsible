@@ -1,6 +1,3 @@
-provider "google"{
-deletion_protection=false
-}
 module "mymodule" {
    source               = "../"
    location_1 = "eastus2"
@@ -9,4 +6,5 @@ module "mymodule" {
    azure_resource_group = "jhaugland-aks-rg"
    cockroach_namespace = "cockroach"
    kubeconfig = "/Users/jasonhaugland/.kube/config"
+   run_k8s_cockroach = "yes"
 }
