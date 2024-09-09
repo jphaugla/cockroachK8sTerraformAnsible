@@ -5,6 +5,7 @@
 *.tfstate
 *.tfstate.*
 */.terraform.lock.hcl
+**/.terraform.lock.hcl
 multiregionGKE/test/.terraform.lock.hcl
 
 # Crash log files
