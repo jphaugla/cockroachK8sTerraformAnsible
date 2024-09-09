@@ -3,8 +3,6 @@
 
 provider "aws" {
   region = var.region
-  shared_config_files      = ["/Users/jasonhaugland/.aws2/config"]
-  shared_credentials_files = ["/Users/jasonhaugland/.aws2/credentials"]
 }
 
 # Filter out local zones, which are not currently supported 
@@ -17,7 +15,7 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  cluster_name = "jph-eks-${random_string.suffix.result}"
+  cluster_name = "${var.cluster_prefix}-${random_string.suffix.result}"
 }
 
 resource "random_string" "suffix" {
@@ -31,11 +29,11 @@ module "vpc" {
 
   name = "jphaugla-vpc"
 
-  cidr = "10.0.0.0/16"
+  cidr = var.cidr
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  private_subnets = ["10.0.1.0/25", "10.0.2.0/25", "10.0.3.0/25"]
-  public_subnets  = ["10.0.4.0/25", "10.0.5.0/25", "10.0.6.0/25"]
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -54,7 +52,7 @@ module "eks" {
   version = "20.8.5"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.30"
+  cluster_version = var.eks_cluster_version
 
   cluster_endpoint_public_access           = true
   enable_cluster_creator_admin_permissions = true
