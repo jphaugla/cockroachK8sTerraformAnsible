@@ -44,3 +44,8 @@ variable "run_k8s_cockroach" {
 variable "eks_cluster_version" {
    description = "eks cluster version"
 }
+
+variable "kubeconfig" {
+   description = "location for the kubeconfig file"
+   default = "/Users/jasonhaugland/.kube/config"
+}

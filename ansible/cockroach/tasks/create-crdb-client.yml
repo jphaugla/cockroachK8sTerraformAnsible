@@ -4,7 +4,7 @@
 ---
 
 # setting force to false so can instead modify the namespace by downloading ahead of time
-- name: Download cockroach clientyaml
+- name: Download cockroach client yaml
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/cockroachdb/cockroach/master/cloud/kubernetes/bring-your-own-certs/client.yaml
     dest: cockroach/files/client.yaml

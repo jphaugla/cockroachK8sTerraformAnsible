@@ -1,6 +1,11 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
+locals {
+  cluster_name = "${var.cluster_prefix}-${random_string.suffix.result}"
+  zones = ["1", "2", "3"]
+}
+
 provider "aws" {
   region = var.region
 }
@@ -12,10 +17,6 @@ data "aws_availability_zones" "available" {
     name   = "opt-in-status"
     values = ["opt-in-not-required"]
   }
-}
-
-locals {
-  cluster_name = "${var.cluster_prefix}-${random_string.suffix.result}"
 }
 
 resource "random_string" "suffix" {
@@ -77,7 +78,6 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
-
   }
 
   eks_managed_node_groups = {
@@ -89,11 +89,11 @@ module "eks" {
 
       min_size     = 1
       max_size     = 3
-      desired_size = 2
+      desired_size = 3
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       }
-    }
+   }
 
     two = {
       name = "jphaugla-group-2"
@@ -126,4 +126,33 @@ module "irsa-ebs-csi" {
   provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+}
+
+#  Define a storage class referencing the EBS CSI driver
+resource "kubernetes_storage_class" "ebs_csi_sc" {
+  metadata {
+    name = "ebs-csi-sc"
+  }
+
+  storage_provisioner = "ebs.csi.aws.com"
+  parameters = {
+    type = "gp2" # Adjust type for desired performance (e.g., st1 for high throughput)
+  }
+}
+
+# Create a persistent volume claim referencing the storage class
+resource "kubernetes_persistent_volume_claim" "jphaugland_pvc" {
+  metadata {
+    name = "jphaugland-pvc"
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "10Gi"
+      }
+    }
+    storage_class_name = kubernetes_storage_class.ebs_csi_sc.metadata[0].name
+  }
 }

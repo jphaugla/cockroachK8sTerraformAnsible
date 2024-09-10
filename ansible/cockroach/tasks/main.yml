@@ -13,6 +13,11 @@
   when:
     - is_gke|bool
 
+- name: "Connect to aws cluster (update kubeconfig)"
+  shell: "aws eks update-kubeconfig --region {{ region }} --name {{ cluster_name }}"
+  when:
+    - is_eks|bool
+ 
 - meta: end_play
   when: run_k8s_cockroach == "no"
 
