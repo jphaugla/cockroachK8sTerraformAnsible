@@ -1,13 +1,14 @@
 # cockroachTerraformAnsible Deploy CockroachDB on kubernetes using terraform and ansible
 ## Purpose
-Demo deployment of Single Region CockroachDB on kubernetes using terraform and ansible.  Has GKE (Google) and AKS (Azure) terraform deployments.  THe Ansible code is deployed from a terraform provisioner in each cloud provider.  
-Ansible code differences between cloud providers is minimal.  The ansible code could also be used in on-premise situations.
+Demo deployments of CockroachDB with kubernetes using terraform and ansible.  Has GKE (Google), EKS (AWS)  and AKS (Azure) terraform deployments.  The Ansible code is deployed from a terraform provisioner subdirectory for each cloud provider.  Ansible code differences between cloud providers are minimal.  The ansible code could also be used in on-premise situations.
 
 ## Outline
 - [Useful Links](#useful-links) 
 - [K8s and ansible on macOS](#k8s-ansible-on-mac)
 - [Single Region](#single-region)
   - [Single Region GKE](#gke)
+    - [Terraform Creation GKE](#terraform-creation-gke)
+  - [Single Region EKS](#eks)
     - [Terraform Creation GKE](#terraform-creation-gke)
   - [Single Region AKS](#aks)
     - [Terraform Creation AKS](#terraform-creation-aks)
@@ -54,9 +55,22 @@ terraform apply --auto-approve
   * Set the context to the *cockroach* namespace with *kubectl config set-context --current --namespace=cockroach*
 * To finish the steps referenced above, continue at [Step 5](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-4-access-the-db-console)
   
-### AKS
-* set the parameters in the main [terraform job file](terraform-azure/test/main.tf)
-  * main.tf file includes version information such as gke_release_channel, gcp credentials, region and zone
+#### Terraform creation EKS
+kick off terraform creation-the eks creation takes a long time-over 10 minutes
+```bash
+source ansible-venv/bin/activate
+cd terraform/test
+terraform init
+terraform apply --auto-approve
+```
+* The terraform and ansible will deploy using the steps referenced in [this cockroachDB documentation](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual)
+* To connect with the GCP need to run *gcloud container clusters get-credentials*
+  * The appropriate parameters for this are available in the GCP cloud interface by selecting the cluster and clicking on the *connect* link near the top of the UI
+  * Set the context to the *cockroach* namespace with *kubectl config set-context --current --namespace=cockroach*
+* To finish the steps referenced above, continue at [Step 5](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-4-access-the-db-console)
+### EKS
+* set the parameters in the main [terraform job file](terraform-aws/test/main.tf)
+  * main.tf file includes version information such as cluster_prefix, credentials, IP addresses, region, vm_size, versions
   * no need to set the variables in [main parameter file](ansible/cockroach/vars/main.yml)
   * this parameter file is only needed for reruns to disable parts of the operation
 
