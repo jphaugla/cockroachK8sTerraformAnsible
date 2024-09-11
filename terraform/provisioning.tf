@@ -6,7 +6,7 @@ resource "null_resource" "provision" {
 
     provisioner "local-exec" {
         working_dir = "../../ansible/"
-        command = "ansible-playbook  -vv --extra-vars cluster_state=present playbook.yml -e 'cluster_name=${google_container_cluster.primary.name}'  -e 'gcp_zone=${var.zone}' -e 'gcp_project=${var.gcp_project}' -e 'KUBECONFIG=gkeconfig' -e 'cockroach_namespace=cockroach' -e 'is_gke=true' -e 'is_aks=false' -e 'run_k8s_cockroach=${var.run_k8s_cockroach}'"
+        command = "ansible-playbook  -vv --extra-vars cluster_state=present playbook.yml -e 'cluster_name=${google_container_cluster.primary.name}'  -e 'gcp_zone=${var.zone}' -e 'gcp_project=${var.gcp_project}' -e 'KUBECONFIG=gkeconfig' -e 'cockroach_namespace=cockroach' -e 'is_gke=true' -e 'is_aks=false' -e 'is_eks=false' -e 'run_k8s_cockroach=${var.run_k8s_cockroach}'"
     }
 
     depends_on = [

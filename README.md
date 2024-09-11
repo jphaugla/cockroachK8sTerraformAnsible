@@ -53,7 +53,7 @@ terraform apply --auto-approve
 * To connect with the GCP need to run *gcloud container clusters get-credentials*
   * The appropriate parameters for this are available in the GCP cloud interface by selecting the cluster and clicking on the *connect* link near the top of the UI
   * Set the context to the *cockroach* namespace with *kubectl config set-context --current --namespace=cockroach*
-* To finish the steps referenced above, continue at [Step 3.  Use the Built-in SQL Client at substep 2.](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-3-use-the-built-in-sql-client)
+* To finish the steps referenced above, continue at [Step 3.  Use the Built-in SQL Client at substep 1. NOTE: the client.yaml is already created so that step is not needed](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-3-use-the-built-in-sql-client)
   
 #### Terraform creation EKS
 kick off terraform creation-the eks creation takes a long time-over 10 minutes
