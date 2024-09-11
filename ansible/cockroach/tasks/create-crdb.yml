@@ -9,7 +9,7 @@
   shell:
     cmd: "kubectl -n {{ cockroach_namespace }} get pod/cockroachdb-0 |grep cockroachdb-0 | grep Running"
   register: running_output
-  retries: 10
+  retries: 20
   until: running_output.stdout | length > 0
 
 - name: wait 2  seconds
