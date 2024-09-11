@@ -2,7 +2,7 @@
   shell: "aws eks update-kubeconfig --region {{ region }} --name {{ cluster_name }}"
 
 - name: "Set context to the new cluster"
-  shell: "kubectl config set-context --current --namespace {{ cockroach_namespace }}"
+  shell: "kubectl config set-context --current" 
 
 - name: "set default storage class for dynamic allocation"
   shell: "{{ git_home }}/ansible/setDefaultStorageClass.sh"
