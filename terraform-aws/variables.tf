@@ -49,3 +49,11 @@ variable "kubeconfig" {
    description = "location for the kubeconfig file"
    default = "/Users/jasonhaugland/.kube/config"
 }
+
+variable "eks_vm_size" {
+   description = "size of the eks aws vm"
+}
+
+variable "git_home" {
+   description = "home file system for the git.  This will need to include the git directory name fo cockroachK8sTerraformAnsible"
+}

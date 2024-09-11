@@ -20,3 +20,7 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = module.eks.cluster_name
 }
+
+# output "ebs_volume_id" {
+#   value = aws_ebs_volume.jphaugland_ebs_volume.id
+# }

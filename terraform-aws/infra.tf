@@ -1,34 +1,11 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-locals {
-  cluster_name = "${var.cluster_prefix}-${random_string.suffix.result}"
-  zones = ["1", "2", "3"]
-}
-
-provider "aws" {
-  region = var.region
-}
-
-# Filter out local zones, which are not currently supported 
-# with managed node groups
-data "aws_availability_zones" "available" {
-  filter {
-    name   = "opt-in-status"
-    values = ["opt-in-not-required"]
-  }
-}
-
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
-}
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.8.1"
 
-  name = "jphaugla-vpc"
+  name = "${var.cluster_prefix}-vpc"
 
   cidr = var.cidr
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
@@ -70,6 +47,7 @@ module "eks" {
     }
     aws-ebs-csi-driver = {
       most_recent = true
+      service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
   }
 
@@ -82,9 +60,9 @@ module "eks" {
 
   eks_managed_node_groups = {
     one = {
-      name = "jphaugla-group-1"
+      name = "${var.cluster_prefix}-group-1"
 
-      instance_types = ["t3.xlarge"]
+      instance_types = ["${var.eks_vm_size}"]
       capacity_type = "ON_DEMAND"
 
       min_size     = 1
@@ -96,9 +74,9 @@ module "eks" {
    }
 
     two = {
-      name = "jphaugla-group-2"
+      name = "${var.cluster_prefix}-group-2"
 
-      instance_types = ["t3.xlarge"]
+      instance_types = ["${var.eks_vm_size}"]
       capacity_type = "ON_DEMAND"
 
       min_size     = 1
@@ -126,33 +104,4 @@ module "irsa-ebs-csi" {
   provider_url                  = module.eks.oidc_provider
   role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
-}
-
-#  Define a storage class referencing the EBS CSI driver
-resource "kubernetes_storage_class" "ebs_csi_sc" {
-  metadata {
-    name = "ebs-csi-sc"
-  }
-
-  storage_provisioner = "ebs.csi.aws.com"
-  parameters = {
-    type = "gp2" # Adjust type for desired performance (e.g., st1 for high throughput)
-  }
-}
-
-# Create a persistent volume claim referencing the storage class
-resource "kubernetes_persistent_volume_claim" "jphaugland_pvc" {
-  metadata {
-    name = "jphaugland-pvc"
-  }
-
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    resources {
-      requests = {
-        storage = "10Gi"
-      }
-    }
-    storage_class_name = kubernetes_storage_class.ebs_csi_sc.metadata[0].name
-  }
 }
