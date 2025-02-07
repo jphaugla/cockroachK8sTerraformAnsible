@@ -1,0 +1,17 @@
+- name: Remove existing CA key and certificate
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "./my-safe-directory/ca.key"
+    - "./certs/ca.crt"
+    - "./certs/client.root.crt"
+    - "./certs/client.root.key"
+    - "./certs/node.crt"
+    - "./certs/node.key"
+    - "./cockroach/files/my-safe-directory/ca.key"
+    - "./cockroach/files/certs/ca.crt"
+    - "./cockroach/files/certs/client.root.crt"
+    - "./cockroach/files/certs/client.root.key"
+    - "./cockroach/files/certs/node.crt"
+    - "./cockroach/files/certs/node.key"

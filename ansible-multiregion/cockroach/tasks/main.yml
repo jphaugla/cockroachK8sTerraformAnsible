@@ -7,6 +7,9 @@
   when:
     - add_python|bool
 
+- name: clean certs directory
+  include_tasks: clean-cert.yml
+
 - name: get necessary cockroach files
   include_tasks: get-cockroach.yml
   when:

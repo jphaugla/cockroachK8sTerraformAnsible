@@ -6,6 +6,10 @@ variable "gcp_credentials_file"  {
     description = "gcp credentials file"
 }
 
+variable "gcp_kubeconfig"  {
+    description = "gcp location for KUBECONFIG file"
+}
+
 variable "cidr" { 
     description = "CIDR blocks to be used with the network."
 }

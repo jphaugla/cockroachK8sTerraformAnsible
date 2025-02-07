@@ -30,6 +30,8 @@ pip3 install requests
 pip3 install google-auth
 pip3 install kubernetes
 pip3 install psycopg2
+pip3 install setuptools
+pip3 install objdict
 brew install ansible
 ```
 Make sure to run terraform and ansible with this environment sourced

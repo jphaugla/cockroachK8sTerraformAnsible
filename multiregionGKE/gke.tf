@@ -7,6 +7,7 @@ module "region1" {
    source               = "../terraform"
    gcp_project          = var.gcp_project
    gcp_credentials_file = var.gcp_credentials_file
+   gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[0]
    region               = var.region[0]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[0]}"
@@ -19,6 +20,7 @@ module "region2" {
    source               = "../terraform"
    gcp_project          = var.gcp_project
    gcp_credentials_file = var.gcp_credentials_file
+   gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[1]
    region               = var.region[1]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[1]}"
@@ -31,6 +33,7 @@ module "region3" {
    source               = "../terraform"
    gcp_project          = var.gcp_project
    gcp_credentials_file = var.gcp_credentials_file
+   gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[2]
    region               = var.region[2]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[2]}"
