@@ -2,6 +2,10 @@ variable "gcp_project"  {
     description = "gcp project to be used."
 }
 
+variable "gcp_kubeconfig"  {
+    description = "gcp location for KUBECONFIG file"
+}
+
 variable "gcp_credentials_file"  {
     description = "gcp credentials file"
 }

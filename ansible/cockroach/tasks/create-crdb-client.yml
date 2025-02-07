@@ -11,9 +11,10 @@
     force: true
     mode: '0664'
 
-- name: deploy cockroach client yaml
-  kubernetes.core.k8s:
-    state: present
-    namespace: "{{ cockroach_namespace }}"
-    kubeconfig: "{{ KUBECONFIG }}"
-    src: client.yaml
+- name: Apply a Kubernetes manifest
+  shell: kubectl apply  -n {{ cockroach_namespace }} -f cockroach/files/client.yaml
+  register: kubectl_output
+
+- name: Show kubectl apply output
+  debug:
+    var: kubectl_output.stdout

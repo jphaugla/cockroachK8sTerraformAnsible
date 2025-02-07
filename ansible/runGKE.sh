@@ -1,0 +1,1 @@
+ansible-playbook  -vvvv --extra-vars cluster_state=present playbook.yml -e 'cluster_name=jph-gke'  -e 'gcp_zone=us-central1-a' -e 'gcp_project=cockroach-jhaugland' -e 'KUBECONFIG=gkeconfig' -e 'cockroach_namespace=cockroach' -e 'is_gke=true' -e 'is_aks=false' -e 'is_eks=false' -e 'run_k8s_cockroach=yes'

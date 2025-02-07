@@ -71,4 +71,24 @@ resource "google_container_node_pool" "primary_nodes" {
 #   client_key             = google_container_cluster.primary.master_auth.0.client_key
 #   cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
 # }
+data "google_client_openid_userinfo" "me" {}
+
+resource "kubernetes_cluster_role_binding" "admin_binding" {
+  metadata {
+    name = "terraform-cluster-admin-binding"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-admin"
+  }
+
+  subject {
+    kind      = "User"
+    name      = data.google_client_openid_userinfo.me.email
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
 

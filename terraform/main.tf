@@ -1,4 +1,4 @@
-provider "google"{
+provider "google" {
     credentials = file(var.gcp_credentials_file)
 
     project = var.gcp_project

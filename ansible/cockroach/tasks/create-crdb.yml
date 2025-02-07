@@ -1,9 +1,12 @@
-- name: deploy cockroach yaml
-  kubernetes.core.k8s:
-    state: present
-    namespace: "{{ cockroach_namespace }}"
-    kubeconfig: "{{ KUBECONFIG }}"
-    src: cockroachdb-statefulset.yaml
+- name: Apply CockroachDB StatefulSet
+  shell: kubectl apply -n {{ cockroach_namespace }} -f cockroach/files/cockroachdb-statefulset.yaml
+  environment:
+    KUBECONFIG: "{{ KUBECONFIG }}"
+  register: kubectl_output
+
+- name: Show kubectl apply output
+  debug:
+    var: kubectl_output.stdout
 
 - name: wait until cockroach pod is running
   shell:
@@ -16,10 +19,11 @@
   pause:
     seconds: 2
 
-- name: init cockroach db
-  kubernetes.core.k8s_exec:
-    namespace: "{{ cockroach_namespace }}"
-    pod: cockroachdb-0
-    command: /cockroach/cockroach init --certs-dir=/cockroach/cockroach-certs
-    kubeconfig: "{{ KUBECONFIG }}"
+- name: Initialize CockroachDB
+  shell: >
+    kubectl exec -n {{ cockroach_namespace }} cockroachdb-0 -- 
+    /cockroach/cockroach init --certs-dir=/cockroach/cockroach-certs
+  environment:
+    KUBECONFIG: "{{ KUBECONFIG }}"
   ignore_errors: yes
+
