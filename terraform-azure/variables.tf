@@ -24,17 +24,12 @@ variable "aks_pool_name" {
 
 variable "aks_vm_size" {
   description = "The Azure Region in which all resources in this example should be provisioned"
-  default = "Standard_D8s_v3"
+  default = "Standard_D8s_v5"
 }
 
 variable "aks_node_count" {
   description = "The number of azure crdb nodes"
   default = 3
-}
-
-variable "cockroachdb_version" {
-  description = "Cockroach version to install"
-  default = "v23.2.5"
 }
 
 variable "cockroachdb_pod_cpu" {

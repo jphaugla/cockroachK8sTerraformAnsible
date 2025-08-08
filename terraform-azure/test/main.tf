@@ -4,6 +4,7 @@ module "mymodule" {
    prefix = "jph"
    owner = "jhaugland"
    aks_node_count = 3
+   aks_vm_size = "Standard_D4_v5"
    azure_resource_group = "jhaugland-aks-rg"
    cockroach_namespace = "cockroach"
    kubeconfig = "/Users/jasonhaugland/.kube/config"
