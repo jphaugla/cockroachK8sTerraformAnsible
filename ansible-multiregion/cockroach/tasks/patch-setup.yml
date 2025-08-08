@@ -1,40 +1,59 @@
-# google.cloud.gcp_container_cluster docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_cluster_module.html
-# google.cloud.gcp_container_node_pool docs: https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_container_node_pool_module.html
-
 # replace python 2 print statements with python 3
 - name: replace python 2 print statement
   shell:
     chdir: cockroach/files
-    cmd: '2to3 -f print -w setup.py'
+    cmd: "{{ ansible_venv }}/bin/2to3 -f all -w setup.py"
+  when: enable_replace_print | default(true)
 
-# replace dict with objdict
+- name: Append decode and strip to check_output call in setup.py
+  replace:
+    path: cockroach/files/setup.py
+    # Match the check_output call (this regex assumes the call is on one line)
+    regexp: "(check_output\\(\\[[^\\]]*\\]\\))"
+    # Replace with the original captured group plus .decode('utf-8').strip()
+    replace: "\\1.decode('utf-8').strip()"
+  when: append_decod | default(true)
+
 - name: add objdict import
   ansible.builtin.lineinfile:
     path: cockroach/files/setup.py
     insertafter: "import distutils.spawn"
     line: "from objdict import ObjDict"
+  when: enable_objdict_import | default(false)
+
+- name: Ensure FQDN is used in Cockroach join addresses
+  ansible.builtin.replace:
+    path: cockroach/files/setup.py
+    regexp: "cockroachdb-%d\\.cockroachdb\\.\\%s"
+    replace: "cockroachdb-%d.cockroachdb.%s.svc.cluster.local"
+  when: add_fqdn_join | default(true)
 
 - name: replace remote dns structure
   replace:
     path: cockroach/files/setup.py
     regexp: "remote_dns_ips = dict"
     replace: "remote_dns_ips = ObjDict"
+  when: enable_replace_dns_structure | default(false)
 
 - name: replace json dump
   lineinfile:
     path: cockroach/files/setup.py
     regexp: "json.dumps"
     line: '""" % remote_dns_ips.dumps())'
+  when: enable_replace_json_dump | default(false)
 
 - name: replace ip assignment logic
   lineinfile:
     path: cockroach/files/setup.py
     regexp: "remote_dns_ips[z"
     line: "key = z+'.svc.cluster.local'"
+  when: enable_replace_ip_assignment_logic | default(false)
 
 - name: add assignment
   ansible.builtin.lineinfile:
     path: cockroach/files/setup.py
     insertafter: "key = z+'.svc.cluster.local'"
-    firstmatch: true
+    firstmatch: false
     line: "remote_dns_ips.key = [ip]"
+  when: enable_add_assignment | default(false)
+

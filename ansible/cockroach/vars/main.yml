@@ -7,3 +7,9 @@ gen_client_certs: true
 gen_node_certs: true
 create_crdb: true
 create_crdb_client: true
+crdb_prep: true
+pod: cockroachdb-client-secure
+sql_scripts:
+   - { src: system_locations.sql, dest: /cockroach/system_locations.sql }
+   - { src: create_user.sql,       dest: /cockroach/create_user.sql }
+target: "{{ cockroach_namespace }}/{{ pod }}"

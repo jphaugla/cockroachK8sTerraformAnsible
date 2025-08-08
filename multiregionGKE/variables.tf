@@ -35,5 +35,8 @@ variable "cockroach_namespace" {
 }
 
 variable "run_k8s_cockroach" {
-  description = "run the kubernetes to set up kafka.  Set to yes for single region but for multiregion or if want to do a more custom install of cockroachDB, set to no"
+  description = "Set to yes for single region but for multiregion or if want to do a more custom install of cockroachDB, set to no"
+}
+variable "ansible_venv" {
+   description = "full path to python environment"
 }

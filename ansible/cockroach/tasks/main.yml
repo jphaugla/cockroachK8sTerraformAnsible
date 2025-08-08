@@ -47,3 +47,7 @@
   when:
     - create_crdb_client|bool
 
+- name: cockroach crdb prep
+  include_tasks: crdb-prep.yml		
+  when:
+    - crdb_prep|bool

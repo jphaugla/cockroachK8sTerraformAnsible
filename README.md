@@ -55,7 +55,7 @@ terraform apply --auto-approve
 * To connect with the GCP need to run *gcloud container clusters get-credentials*
   * The appropriate parameters for this are available in the GCP cloud interface by selecting the cluster and clicking on the *connect* link near the top of the UI
   * Set the context to the *cockroach* namespace with *kubectl config set-context --current --namespace=cockroach*
-* To finish the steps referenced above, continue at [Step 3.  Use the Built-in SQL Client at substep 1. NOTE: the client.yaml is already created so that step is not needed](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes?filters=manual#step-3-use-the-built-in-sql-client)
+* This completes the steps referenced in this [kubernetes documentation](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes) including creating the client and creating an database admin username that is defined in the main.tf.  A sql login script is also available at [sql.sh](scripts/sql.sh).
   
 #### Terraform creation EKS
 kick off terraform creation-the eks creation takes a long time-over 10 minutes
@@ -92,6 +92,8 @@ terraform apply --auto-approve
   * main.tf file includes version information such as gke_release_channel, gcp credentials, region and zone
   * no need to set the variables in [main parameter file](ansible-multiregion/cockroach/vars/main.yml)
   * this parameter file is only needed for reruns to disable parts of the operation
+* Can do a cleanup on the python script (setup.py) using teardown.py following [these teardown instructions](https://www.cockroachlabs.com/docs/stable/orchestrate-cockroachdb-with-kubernetes-multi-cluster#stop-the-cluster)
+  * This downloaded ![teardown.py](ansible-multiregion/cockroach/files/teardown.py) script needs to have the context modified before running it.  Easiest to open the ![setup.py](ansible-multiregion/cockroach/files/setup.py) script, copy the context section, and past this context into the ![teardown.py](ansible-multiregion/cockroach/files/teardown.py).  Then, run the teardown.py.
 ## Ansible documentation
 * In each of the terraform directories, the ansible is initiated using provisioning.tf
   * For Single Region AKS, [provisioning.tf](terraform-azure/provisioning.tf)

@@ -15,6 +15,7 @@ resource "google_container_cluster" "primary" {
   release_channel {
     channel = var.gke_release_channel
   }
+  depends_on = [google_compute_subnetwork.vpc_subnetwork]
 }
 
 # Separately Managed Node Pool

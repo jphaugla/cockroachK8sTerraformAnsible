@@ -1,0 +1,5 @@
+#  this is BAD.  current setup.py doesn't work so using a fixed version
+- name: using working version instead of downloaded version
+  copy:
+    src: cockroach/files/setup.py.ok
+    dest: cockroach/files/setup.py

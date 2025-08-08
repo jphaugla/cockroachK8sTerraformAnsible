@@ -15,6 +15,13 @@
   when:
     - get_cockroach|bool
 
+# will not use both of these and hopefully neither and can use original.  
+# top one replaces setup whereas the second one patches the original setup
+- name: replace out setup.py
+  include_tasks: replace-setup.yml
+  when:
+    - replace_setup|bool
+
 - name: patch setup.py
   include_tasks: patch-setup.yml
   when:
@@ -25,6 +32,11 @@
   when:
     - edit_setup|bool
 
+- name: edit teardown.py
+  include_tasks: edit-teardown.yml
+  when:
+    - edit_teardown|bool
+
 - name: edit cockroachdb-statefulset-secure.yaml
   include_tasks: edit-stateful.yml
   when:
@@ -32,7 +44,7 @@
 
 - name: run setup.py
   shell: 
-    cmd: python setup.py
+    cmd: "{{ ansible_venv }}/bin/python setup.py"
     chdir: cockroach/files 
   when:
     - run_setup|bool

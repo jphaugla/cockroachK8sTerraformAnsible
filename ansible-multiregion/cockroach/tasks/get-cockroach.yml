@@ -9,13 +9,12 @@
     chdir: cockroach/files
     creates: cockroach/files/setup.py
 
-- name: Copy clean version to use location
+- name: Copy clean version of setup.py to use location
   copy:
     src: cockroach/files/setup.py
     dest: cockroach/files/setup.py.clean
 
-#  this is BAD.  current setup.py doesn't work so using a fixed version
-- name: using working version instead of downloaded version
+- name: Copy clean version to use location
   copy:
-    src: cockroach/files/setup.py.ok
-    dest: cockroach/files/setup.py
+    src: cockroach/files/teardown.py
+    dest: cockroach/files/teardown.py.clean

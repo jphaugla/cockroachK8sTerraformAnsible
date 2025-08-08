@@ -1,0 +1,60 @@
+# This file exposes cockroachdb publicly via a LoadBalancer.
+# It replaces the ExternalName service from the multi-cluster instructions
+# with a LoadBalancer service so that the service gets a real public IP and proper backend routing.
+# Ensure that your CockroachDB pods carry the label "app: cockroachdb" (or modify the selector appropriately).
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cockroachdb-public
+  namespace: us-central1-a
+  labels:
+    app: cockroachdb
+spec:
+  type: LoadBalancer
+  selector:
+    app: cockroachdb
+  ports:
+    - name: sql
+      port: 26257
+      targetPort: 26257
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+# The following ServiceAccount and RBAC resources may still be needed
+# if you want to allow client applications to access the root client certificate.
+# (They were included in the original external-name-svc.yaml.)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cockroachdb
+  labels:
+    app: cockroachdb
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cockroachdb
+  labels:
+    app: cockroachdb
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cockroachdb
+  labels:
+    app: cockroachdb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cockroachdb
+subjects:
+  - kind: ServiceAccount
+    name: cockroachdb
+    namespace: default
+

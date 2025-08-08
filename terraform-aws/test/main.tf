@@ -10,8 +10,11 @@ module "mymodule" {
    region 		= "us-east-1"
    cockroach_namespace  = "cockroach"
    run_k8s_cockroach    = "yes"
-   eks_cluster_version  = "1.30"
+   eks_cluster_version  = "1.33"
    eks_vm_size          = "t3.xlarge"
+   dbadmin_user_name    = "jhaugland"
+   dbadmin_user_password = "jasonrocks"
+   my_ip_address      = "162.222.52.25"
 }
  
 output "cluster_endpoint" {

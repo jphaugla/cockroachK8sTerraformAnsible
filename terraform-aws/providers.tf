@@ -34,15 +34,3 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.crdb-cluster.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.crdb-cluster-auth.token
 }
-
-provider "null" {
-  # Configuration options
-}
-
-provider "tls" {
-  # Configuration options
-}
-
-provider "time" {
-  # Configuration options
-}

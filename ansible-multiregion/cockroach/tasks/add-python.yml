@@ -4,13 +4,10 @@
 ---
 
 - name: add objdict
-  pip:
-    name: objdict
+  command: "{{ ansible_venv }}/bin/python -m pip install objdict"
 
 - name: add setuptools
-  pip:
-    name: setuptools
+  command: "{{ ansible_venv }}/bin/python -m pip install setuptools"
 
 - name: add 2to3
-  pip:
-    name: 2to3
+  command: "{{ ansible_venv }}/bin/python -m pip install 2to3"

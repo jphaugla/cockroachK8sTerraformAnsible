@@ -21,6 +21,7 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
-# output "ebs_volume_id" {
-#   value = aws_ebs_volume.jphaugland_ebs_volume.id
-# }
+output "irsa_ebs_csi_role_arn" {
+  description = "irsa ebs csi role arn"
+  value       = module.irsa-ebs-csi.iam_role_arn
+}

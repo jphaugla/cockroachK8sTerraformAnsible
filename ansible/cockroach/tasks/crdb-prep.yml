@@ -1,0 +1,32 @@
+- name: copy create user sql script
+  template:
+    src: create_user.j2
+    dest: create_user.sql
+
+- name: Copy system_locations.sql into the client pod
+  command: >
+    kubectl cp
+    cockroach/files/system_locations.sql
+    {{ cockroach_namespace }}/{{ pod }}:/cockroach/system_locations.sql -c cockroachdb-client
+
+- name: Install system locations via Cockroach CLI
+  command: >
+    kubectl exec -n {{ cockroach_namespace }} {{ pod }} -- 
+      cockroach sql 
+        --certs-dir=/cockroach-certs 
+        --file=/cockroach/system_locations.sql
+        --host cockroachdb-public
+
+- name: Copy create_user.sql into the client pod
+  command: >
+    kubectl cp
+    create_user.sql
+    {{ cockroach_namespace }}/{{ pod }}:/cockroach/create_user.sql -c cockroachdb-client
+
+- name: Create (upsert) admin user via Cockroach CLI
+  command: >
+    kubectl exec -n {{ cockroach_namespace }} {{ pod }} -- 
+      cockroach sql 
+        --certs-dir=/cockroach-certs 
+        --file=/cockroach/create_user.sql
+        --host cockroachdb-public

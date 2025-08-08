@@ -6,6 +6,10 @@ get_cockroach: true
 run_setup: true
 add_python: true
 edit_setup: true
+# this doesn't work yet and might not fix it as teardown is different
+edit_teardown: false
 edit_stateful: true
-#  just using a replacement file
-patch_setup: false
+#  patch the setup with edits
+patch_setup: true
+#  just use a replacement file
+replace_setup: false

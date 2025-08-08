@@ -9,6 +9,7 @@ module "region1" {
    gcp_credentials_file = var.gcp_credentials_file
    gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[0]
+   full_cidr		= var.cidr
    region               = var.region[0]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[0]}"
    zone                 = "${var.zone[0]}"
@@ -22,6 +23,7 @@ module "region2" {
    gcp_credentials_file = var.gcp_credentials_file
    gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[1]
+   full_cidr		= var.cidr
    region               = var.region[1]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[1]}"
    zone                 = "${var.zone[1]}"
@@ -35,6 +37,7 @@ module "region3" {
    gcp_credentials_file = var.gcp_credentials_file
    gcp_kubeconfig       = var.gcp_kubeconfig
    cidr                 = var.cidr[2]
+   full_cidr		= var.cidr
    region               = var.region[2]
    cluster_name_final   = "${var.cluster_prefix}-${var.region[2]}"
    zone                 = "${var.zone[2]}"

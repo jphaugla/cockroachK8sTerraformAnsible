@@ -1,0 +1,3 @@
+create user if not exists {{ dbadmin_user_name }} with login password '{{ dbadmin_user_password }}';
+grant all on database defaultdb to {{ dbadmin_user_name }};
+grant admin to {{ dbadmin_user_name }};
