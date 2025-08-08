@@ -74,3 +74,20 @@ variable "kubeconfig" {
 variable "run_k8s_cockroach" {
   description = "run the kubernetes to set up kafka.  Set to yes for single region but for multiregion or if want to do a more custom install of cockroachDB, set to no"
 }
+variable "dbadmin_user_name"{
+  description = "An admin with this username will be created if 'create_dbadmin_user=yes'"
+  type        = string
+  default     = ""
+}
+
+variable "dbadmin_user_password"{
+  description = "password for the admin user"
+  type        = string
+  default     = ""
+}
+
+variable "owner" {
+  description = "Owner of the infrastructure"
+  type        = string
+  default     = ""
+}

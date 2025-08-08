@@ -19,6 +19,10 @@ resource "azurerm_virtual_network" "region_1" {
   location            = var.location_1
   resource_group_name = "${var.azure_resource_group}"
   address_space       = var.location_1_vnet_address_space
+  tags = {
+    owner       = var.owner
+    project     = var.prefix
+  }
 }
 
 # Create subnet in first region
@@ -35,13 +39,22 @@ resource "azurerm_user_assigned_identity" "aks" {
   name                = "id-aks-cac-001"
   resource_group_name = "${var.azure_resource_group}"
   location            = var.location_1
+  tags = {
+    owner       = var.owner
+    project     = var.prefix
+  }
 }
 
-# resource "azurerm_role_assignment" "network_contributor_region_1" {
-#   scope                = azurerm_virtual_network.region_1.id
-#   role_definition_name = "Network Contributor"
-#   principal_id         = azurerm_user_assigned_identity.aks.principal_id
-# }
+resource "azurerm_role_assignment" "network_contributor_region_1" {
+  scope                = azurerm_subnet.internal-region_1.id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_user_assigned_identity.aks.principal_id
+  # ensure the identity & subnet exist first
+  depends_on = [
+    azurerm_user_assigned_identity.aks,
+    azurerm_subnet.internal-region_1,
+  ]
+}
 
 ### Region 1 AKS Cluster Creation
 resource "azurerm_kubernetes_cluster" "aks_region_1" {
@@ -64,5 +77,9 @@ resource "azurerm_kubernetes_cluster" "aks_region_1" {
 
   network_profile {
     network_plugin = "azure"
+  }
+  tags = {
+    owner       = var.owner
+    project     = var.prefix
   }
 }
